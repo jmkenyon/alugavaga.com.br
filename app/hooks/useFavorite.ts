@@ -2,6 +2,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import toast from "react-hot-toast";
+import { FaHeart } from "react-icons/fa";
 
 import { SafeUser } from "../types";
 
@@ -41,7 +42,11 @@ const useFavorite = ({ listingId, currentUser }: IUseFavorite) => {
 
         await request();
         router.refresh();
-        toast.success("Sucesso");
+        if (hasFavorited) {
+          toast.success("Desfavoritado", { icon: "💔" });
+        } else {
+          toast.success("Favoritado", { icon: "❤️" });
+        }
       } catch (error) {
         toast.error("Algo deu errado");
       }

@@ -34,21 +34,27 @@ const ListingCard: React.FC<ListingCardProps> = ({
 
   const parts = location.split(",").map((part) => part.trim());
 
-  const street = parts[0].replace(/\d+/g, '').trim();
-  const cityStateIndex = parts.findIndex(part => part.includes(" - "));
-
-  let neighborhood = "";
-  if (cityStateIndex > 1) {
-    // Join all parts between street and city/state as neighborhood
-    neighborhood = parts.slice(1, cityStateIndex).join(", ");
-  } else if (cityStateIndex === 1) {
-    neighborhood = parts[1];
-  }
+  const street = parts[0].replace(/\d+/g, "").trim();
+  const cityStateIndex = parts.findIndex((part) => part.includes(" - "));
 
   // City and state part
-  const cityState = cityStateIndex >= 0 ? parts[cityStateIndex] : "";
+  let cityState = cityStateIndex >= 0 ? parts[cityStateIndex] : "";
 
+  const normalize = (str: string) =>
+    str
+      .normalize("NFD") // separate letters from accents
+      .replace(/[\u0300-\u036f]/g, "") // remove accents
+      .toLowerCase()
+      .trim();
 
+  if (cityState.includes(" - ")) {
+    const [left, right] = cityState.split(" - ").map((p) => p.trim());
+    if (normalize(left) === normalize(right)) {
+      cityState = left; // keep only one
+    }
+  }
+
+  
 
   const handleCancel = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -115,26 +121,22 @@ const ListingCard: React.FC<ListingCardProps> = ({
           </div>
         </div>
         <div className="font-semibold">
-          {street}, {cityState}
+          {street && street}, {cityState && cityState}
         </div>
         <div className="font-light text-neutral-500">
-            {reservationDate || data.title}
+          {reservationDate || data.title}
         </div>
         <div className="flex flex-row items-center gap-1">
-            <div className="font-semibold">
-                $ {price}
-            </div>
-            {!reservation && (
-                <div className="font-light">por mes</div>
-            )}
+          <div className="font-semibold">$ {price}</div>
+          {!reservation && <div className="font-light">por mes</div>}
         </div>
         {onAction && actionLabel && (
-            <Button 
-                disabled={disabled}
-                small
-                label={actionLabel}
-                onClick={handleCancel}
-            />
+          <Button
+            disabled={disabled}
+            small
+            label={actionLabel}
+            onClick={handleCancel}
+          />
         )}
       </div>
     </div>

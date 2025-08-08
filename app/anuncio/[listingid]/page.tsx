@@ -8,19 +8,17 @@ interface IParams {
   listingid?: string;
 }
 
-const ListingPage = async ({ params }: { params: IParams }) => {
-  const listing = await getListingById({ listingId: params.listingid });
+const ListingPage = async ({ params }: { params: Promise<IParams> }) => {
+  const resolvedParams = await params;
+
+  const listing = await getListingById({ listingId: resolvedParams.listingid });
   const currentUser = await getCurrentUser();
 
   if (!listing) {
     return <EmptyState />;
   }
 
-  return (
-    <div>
-      <ListingClient listing={listing} currentUser={currentUser} />
-    </div>
-  );
+  return <ListingClient listing={listing} currentUser={currentUser} />;
 };
 
 export default ListingPage;
