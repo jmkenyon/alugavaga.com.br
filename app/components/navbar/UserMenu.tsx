@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import Avatar from "../Avatar";
 import MenuItem from "./MenuItem";
@@ -9,16 +9,19 @@ import useLoginModal from "@/app/hooks/useLoginModal";
 import useRentModal from "@/app/hooks/useRentModal";
 import { signOut } from "next-auth/react";
 import { SafeUser } from "@/app/types";
+import { useRouter } from "next/navigation";
 
 interface UserMenuProps {
   currentUser?: SafeUser | null;
 }
 
 const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
+  const router = useRouter();
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
   const rentModal = useRentModal();
   const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
@@ -31,8 +34,26 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
     rentModal.onOpen();
   }, [currentUser, loginModal, rentModal]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
   return (
-    <div className="relative">
+    <div className="relative" ref={menuRef}>
       <div className="flex flex-row items-center gap-3">
         <div
           onClick={onRent}
@@ -56,9 +77,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
           <div className="flex flex-col cursor-pointer">
             {currentUser ? (
               <>
-                <MenuItem onClick={() => {}} label="Minhas reservas" />
-                <MenuItem onClick={() => {}} label="Meus favoritos" />
-                <MenuItem onClick={() => {}} label="Minhas vagas" />
+                <MenuItem onClick={() => router.push('/reservas')} label="Minhas reservas" />
+                <MenuItem onClick={() => router.push('/favoritos')} label="Meus favoritos" />
+                <MenuItem onClick={() => router.push('/reservas-recebidas')} label="Reservas Recebidas" />
+                <MenuItem onClick={() => router.push('/vagas')} label="Minhas vagas" />
                 <MenuItem
                   onClick={rentModal.onOpen}
                   label="Anunciar minha vaga"
@@ -70,7 +92,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
               <>
                 <MenuItem onClick={loginModal.onOpen} label="Entrar" />
                 <MenuItem onClick={registerModal.onOpen} label="Cadastrar-se" />
-                {/* Add more menu items here if needed */}
               </>
             )}
           </div>

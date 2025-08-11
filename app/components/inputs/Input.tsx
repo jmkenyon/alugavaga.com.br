@@ -66,21 +66,21 @@ const Input: React.FC<InputProps> = ({
                         ? "focus:border-rose-500"
                         : "focus:border-black"
                     }
-                    ${id === "description"  ? "h-[150px]" : ""}
-                    ${id === "title"  ? "h-[100px]" : ""}
+                    ${id === "description" ? "h-[150px]" : ""}
+                    ${id === "title" ? "h-[100px]" : ""}
                 `}
       />
       <label
+        htmlFor={id}
         className={`
             absolute
             text-md
             duration-150
             transform
-            ${
-              placeholder || formatPrice
-                ? "scale-75 -translate-y-4"
-                : "peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4"
-            }
+            peer-placeholder-shown:scale-100
+            peer-placeholder-shown:translate-y-0
+            peer-focus:scale-75
+            peer-focus:-translate-y-4
             top-5
             z-10
             origin-[0]

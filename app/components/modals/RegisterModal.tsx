@@ -39,16 +39,27 @@ const RegisterModal = () => {
     axios
       .post("/api/register", data)
       .then(() => {
-        registerModal.onClose();
+        // After successful registration, call signIn to login automatically
+        signIn("credentials", {
+          email: data.email,
+          password: data.password,
+          redirect: false,
+        }).then((callback) => {
+          setIsLoading(false);
+          if (callback?.ok) {
+            toast.success("Conta criada e logada com sucesso!");
+            registerModal.onClose();
+            window.location.reload();
+          } else {
+            toast.error("Conta criada, mas falha ao logar automaticamente.");
+          }
+        });
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error("Algo deu errado");
-      })
-      .finally(() => {
         setIsLoading(false);
       });
   };
-
   const toggle = useCallback(() => {
     registerModal.onClose();
     loginModal.onOpen();
@@ -68,6 +79,7 @@ const RegisterModal = () => {
         register={register}
         errors={errors}
         required
+        placeholder=""
       />
       <Input
         id="email"
@@ -77,6 +89,7 @@ const RegisterModal = () => {
         errors={errors}
         required
         type="email"
+        placeholder=""
       />
       <Input
         id="password"
@@ -86,6 +99,7 @@ const RegisterModal = () => {
         errors={errors}
         required
         type="password"
+        placeholder=""
       />
     </div>
   );

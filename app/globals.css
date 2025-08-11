@@ -29,3 +29,8 @@ html,
   width: 100% !important;
   font-size: 16px !important;
 }
+
+/* For peer input that is NOT placeholder-shown */
+.peer:not(:placeholder-shown) ~ label {
+  transform: translateY(-1rem) scale(0.75);
+}

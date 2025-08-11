@@ -14,9 +14,10 @@ export type CountrySelectValue = {
 interface LocationSelectProps {
   onChange: (value: CountrySelectValue) => void;
   value?: CountrySelectValue;
+  placeholder?: string;
 }
 
-const LocationSelect: React.FC<LocationSelectProps> = ({ onChange, value }) => {
+const LocationSelect: React.FC<LocationSelectProps> = ({ onChange, value, placeholder }) => {
   const fetchOptions = useCallback(async (input: string): Promise<CountrySelectValue[]> => {
     if (!input || input.length < 3) return [];
 
@@ -43,7 +44,7 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ onChange, value }) => {
   return (
     <div>
       <AsyncSelect
-        placeholder="Digite seu endereço..."
+        placeholder={placeholder || "Digite seu endereço..."}
         defaultOptions={false}
         loadOptions={fetchOptions}
         onChange={(val) => onChange(val as CountrySelectValue)}

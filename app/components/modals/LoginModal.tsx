@@ -74,6 +74,7 @@ const LoginModal = () => {
         errors={errors}
         required
         type="email"
+        placeholder=""
       />
       <Input
         id="password"
@@ -83,6 +84,7 @@ const LoginModal = () => {
         errors={errors}
         required
         type="password"
+        placeholder=""
       />
     </div>
   );

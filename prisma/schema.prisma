@@ -60,6 +60,8 @@ model Listing {
   price         Int
   category      String
   whatsapp      String
+  lat           Float // Latitude
+  lng           Float
 
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]

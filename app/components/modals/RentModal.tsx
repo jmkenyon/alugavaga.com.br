@@ -79,14 +79,19 @@ const RentModal = () => {
   };
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    if (step !== STEPS.PRICE) {
-      return onNext();
-    }
+    if (step !== STEPS.PRICE) return onNext();
 
     setIsLoading(true);
 
+    // Add lat and lng extracted from location to the data sent to backend
+    const payload = {
+      ...data,
+      lat: data.location?.latlng?.lat,
+      lng: data.location?.latlng?.lng,
+    };
+
     axios
-      .post("/api/listings", data)
+      .post("/api/listings", payload)
       .then(() => {
         toast.success("Listing Created!");
         router.refresh();
@@ -94,12 +99,8 @@ const RentModal = () => {
         setStep(STEPS.CATEGORY);
         rentModal.onClose();
       })
-      .catch(() => {
-        toast.error("Algo deu errado");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      .catch(() => toast.error("Algo deu errado"))
+      .finally(() => setIsLoading(false));
   };
 
   const actionLabel = useMemo(() => {
@@ -173,7 +174,7 @@ const RentModal = () => {
           id="whatsapp"
           label="WhatsApp"
           type="tel"
-          placeholder="+55 (11) 91234-5678"
+          placeholder=" "
           disabled={isLoading}
           register={register}
           errors={errors}
