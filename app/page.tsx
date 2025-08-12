@@ -1,16 +1,17 @@
 import EmptyState from "./components/EmptyState";
-
 import Container from "./components/Container";
 import getListings, { IListingsParams } from "./actions/getListings";
 import ListingCard from "./components/listings/ListingCard";
 import getCurrentUser from "./actions/getCurrentUser";
 
+// Match Next.js type for `searchParams`
 interface HomeProps {
-  searchParams?: Partial<IListingsParams>;
+  searchParams?: Promise<Partial<IListingsParams>>;
 }
 
 const Home = async ({ searchParams }: HomeProps) => {
-  const listings = await getListings(searchParams ?? {});
+  const resolvedParams = (await searchParams) ?? {};
+  const listings = await getListings(resolvedParams);
   const currentUser = await getCurrentUser();
 
   if (listings.length === 0) {
