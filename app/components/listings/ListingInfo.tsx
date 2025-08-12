@@ -22,7 +22,7 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
   description,
   category,
   locationValue,
-  whatsapp,
+  // whatsapp, - will use shortly 
 }) => {
   const [coordinates, setCoordinates] = useState<[number, number] | null>(null);
 

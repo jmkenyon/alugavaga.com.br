@@ -17,11 +17,24 @@ interface LocationSelectProps {
   placeholder?: string;
 }
 
+// Define Mapbox context type
+interface MapboxContext {
+  id: string;
+  text: string;
+}
+
+// Define Mapbox feature type
+interface MapboxFeature {
+  place_name: string;
+  center: [number, number];
+  context?: MapboxContext[];
+}
+
 const LocationSelect: React.FC<LocationSelectProps> = ({ onChange, value, placeholder }) => {
   const fetchOptions = useCallback(async (input: string): Promise<CountrySelectValue[]> => {
     if (!input || input.length < 3) return [];
 
-    const res = await axios.get(
+    const res = await axios.get<{ features: MapboxFeature[] }>(
       `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(input)}.json`,
       {
         params: {
@@ -32,12 +45,12 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ onChange, value, placeh
       }
     );
 
-    return res.data.features.map((feature: any) => ({
+    return res.data.features.map((feature) => ({
       value: feature.place_name,
       label: feature.place_name,
       latlng: [feature.center[1], feature.center[0]], // [lat, lng]
       region:
-        feature.context?.find((c: any) => c.id.includes("region"))?.text || "",
+        feature.context?.find((c) => c.id.includes("region"))?.text || "",
     }));
   }, []);
 

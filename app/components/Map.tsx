@@ -10,7 +10,7 @@ import marketShadow from "leaflet/dist/images/marker-shadow.png";
 
 
 
-// @ts-ignore
+// @ts-expect-error required to override default Leaflet icon URLs
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconUrl: markerIcon,

@@ -10,7 +10,8 @@ export default async function getReservations(params: IParams) {
   try {
     const { listingId, userId, authorId } = params;
 
-    const query: any = {};
+    // Use Record<string, unknown> instead of any
+    const query: Record<string, unknown> = {};
 
     if (listingId) {
       query.listingId = listingId;
@@ -34,7 +35,7 @@ export default async function getReservations(params: IParams) {
       },
     });
 
-    const SafeReservations = reservations.map((reservation) => ({
+    const safeReservations = reservations.map((reservation) => ({
       ...reservation,
       createdAt: reservation.createdAt.toISOString(),
       startDate: reservation.startDate.toISOString(),
@@ -45,8 +46,11 @@ export default async function getReservations(params: IParams) {
       },
     }));
 
-    return SafeReservations;
-  } catch (error: any) {
-    throw new Error(error);
+    return safeReservations;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("Ocorreu um erro desconhecido");
   }
 }

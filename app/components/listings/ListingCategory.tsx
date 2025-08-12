@@ -9,9 +9,6 @@ interface ListingCategoryProps {
 }
 
 const ListingCategory: React.FC<ListingCategoryProps> = ({
-  icon: Icon,
-  label,
-  description,
 }) => {
   return (
     <div className="flex flex-col gap-6">

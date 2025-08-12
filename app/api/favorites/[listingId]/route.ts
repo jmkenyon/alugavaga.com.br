@@ -21,7 +21,7 @@ export async function POST(
     return NextResponse.json({ error: "ID inválido" }, { status: 400 });
   }
 
-  let favoriteIds = [...(currentUser.favoriteIds || [])];
+  const favoriteIds = [...(currentUser.favoriteIds || [])];
 
   if (!favoriteIds.includes(listingId)) {
     favoriteIds.push(listingId);

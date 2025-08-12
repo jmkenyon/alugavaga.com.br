@@ -6,7 +6,6 @@ import Modal from "./Modal";
 import useSearchModal from "@/app/hooks/useSearchModal";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Range } from "react-date-range";
-import dynamic from "next/dynamic";
 import LocationSelect, { CountrySelectValue } from "../inputs/LocationSelect";
 import { formatISO } from "date-fns";
 import Heading from "../Heading";
@@ -31,14 +30,6 @@ const SearchModal = () => {
     key: "selection",
   });
 
-  const Map = useMemo(
-    () =>
-      dynamic(() => import("../Map"), {
-        ssr: false,
-      }),
-    [location]
-  );
-
   const onBack = useCallback(() => {
     setStep((value) => value - 1);
   }, []);
@@ -58,13 +49,15 @@ const SearchModal = () => {
       currentQuery = qs.parse(params.toString());
     }
 
-    const updatedQuery: any = {
+    const updatedQuery = {
       ...currentQuery,
-      locationValue: location?.value,
-      lat: location?.latlng[0],
-      lng: location?.latlng[1],
+      locationValue: location?.value ?? "",
+      lat: location?.latlng[0] ?? 0,
+      lng: location?.latlng[1] ?? 0,
+      startDate: dateRange.startDate ? formatISO(dateRange.startDate) : undefined,
+      endDate: dateRange.endDate ? formatISO(dateRange.endDate) : undefined,
     };
-
+    
     if (dateRange.startDate) {
       updatedQuery.startDate = formatISO(dateRange.startDate);
     }
@@ -117,8 +110,6 @@ const SearchModal = () => {
           setLocation(value as CountrySelectValue)
         }
       />
-      {/* <hr />
-      <Map center={location?.latlng} /> */}
     </div>
   )
 

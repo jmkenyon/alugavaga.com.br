@@ -14,6 +14,7 @@ import Input from "../inputs/Input";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { CountrySelectValue } from "../inputs/LocationSelect";
 
 enum STEPS {
   CATEGORY = 0,
@@ -59,10 +60,13 @@ const RentModal = () => {
       dynamic(() => import("../Map"), {
         ssr: false,
       }),
-    [location]
+    []
   );
 
-  const setCustomValue = (id: string, value: any) => {
+  const setCustomValue = (
+    id: string,
+    value: CountrySelectValue | string | number | null
+  ) => {
     setValue(id, value, {
       shouldValidate: true,
       shouldDirty: true,
