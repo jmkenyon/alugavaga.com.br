@@ -9,6 +9,8 @@ import ToasterProvider from "./providers/ToasterProvider";
 import getCurrentUser from "./actions/getCurrentUser";
 import SearchModal from "./components/modals/SearchModal";
 import { Suspense } from "react";
+import WhatsappButton from "./components/WhatsappButton";
+
 
 const inter = Inter({
   subsets: ["latin"],
@@ -39,6 +41,7 @@ export default async function RootLayout({
         <RegisterModal />
         <LoginModal />
         <div className="pb-20 pt-28">{children}</div>
+        <WhatsappButton /> 
       </body>
     </html>
   );
