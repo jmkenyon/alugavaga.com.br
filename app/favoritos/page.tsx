@@ -1,5 +1,5 @@
+import { Suspense } from "react";
 import EmptyState from "../components/EmptyState";
-
 import getCurrentUser from "../actions/getCurrentUser";
 import getFavoriteListings from "../actions/getFavoriteListings";
 import FavoritesClient from "./FavoritesClient";
@@ -18,11 +18,10 @@ const ListingPage = async () => {
   }
 
   return (
-    <FavoritesClient
-        listings={listings}
-        currentUser={currentUser}
-    />
-  )
+    <Suspense fallback={<div>Carregando...</div>}>
+      <FavoritesClient listings={listings} currentUser={currentUser} />
+    </Suspense>
+  );
 };
 
 export default ListingPage;
