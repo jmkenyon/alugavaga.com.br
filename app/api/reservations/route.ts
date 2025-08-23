@@ -49,7 +49,7 @@ export async function POST(request: Request) {
       from: 'noreply@alugavaga.com.br',
       to: updatedListing.user.email,
       subject: `Nova reserva para ${updatedListing.title}`,
-      text: `${currentUser.name} reservou seu espaço de ${start.toDateString()} a ${end.toDateString()}.`,
+      text: `Olá, ${currentUser.name} reservou seu vaga de ${start.toDateString()} a ${end.toDateString()}.`,
     });
   }
 

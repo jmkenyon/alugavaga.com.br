@@ -20,6 +20,36 @@ export const metadata: Metadata = {
   title: "Aluga Vaga | Encontre Vagas de Estacionamento",
   description:
     "Alugue ou anuncie vagas de estacionamento com facilidade. Acesso seguro, preços justos e localização prática. Encontre sua vaga agora!",
+  keywords: [
+    "estacionamento",
+    "vaga de garagem",
+    "aluguel de garagem",
+    "parking space rental",
+    "Aluga Vaga",
+    "vagas para alugar",
+    "garagem para alugar",
+    "reservar vaga"
+  ],
+  authors: [
+    { name: "Aluga Vaga Team", url: "https://www.alugavaga.com.br" }
+  ],
+  openGraph: {
+    title: "Aluga Vaga | Encontre Vagas de Estacionamento",
+    description:
+      "Alugue ou anuncie vagas de estacionamento com facilidade. Acesso seguro, preços justos e localização prática. Encontre sua vaga agora!",
+    url: "https://www.alugavaga.com.br",
+    siteName: "Aluga Vaga",
+    images: [
+      {
+        url: "https://www.alugavaga.com.br/images/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Aluga Vaga - Encontre vagas de estacionamento",
+      },
+    ],
+    locale: "pt_BR",
+    type: "website",
+  },
 };
 
 export default async function RootLayout({
