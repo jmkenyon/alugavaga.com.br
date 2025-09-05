@@ -45,7 +45,7 @@ const Search = () => {
 
       return primaryLocation;
     }
-    return "Buscar Vaga";
+    return "Buscar vaga";
   }, [locationValue]);
 
   const durationLabel = useMemo(() => {

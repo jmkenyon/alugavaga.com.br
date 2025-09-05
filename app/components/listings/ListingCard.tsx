@@ -53,8 +53,6 @@ const ListingCard: React.FC<ListingCardProps> = ({
     }
   }
 
-  
-
   const handleCancel = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
@@ -119,15 +117,13 @@ const ListingCard: React.FC<ListingCardProps> = ({
             <HeartButton listingId={data.id} currentUser={currentUser} />
           </div>
         </div>
-        <div className="font-semibold">
+        <div className="font-semibold">{reservationDate || data.title}</div>
+        <div className="font-light text-neutral-500">
           {street && street}, {cityState && cityState}
         </div>
-        <div className="font-light text-neutral-500">
-          {reservationDate || data.title}
-        </div>
         <div className="flex flex-row items-center gap-1">
-          <div className="font-semibold">R$ {price}</div>
-          {!reservation && <div className="font-light">por mes</div>}
+          <div className="font-semibold">R${price}</div>
+          {!reservation && <div className="font-light">por mês</div>}
         </div>
         {onAction && actionLabel && (
           <Button
