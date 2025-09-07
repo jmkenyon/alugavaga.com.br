@@ -82,10 +82,10 @@ const SearchModal = () => {
 
   const actionLabel = useMemo(() => {
     if (step === STEPS.DATE) {
-      return "Search";
+      return "Buscar";
     }
 
-    return "Next";
+    return "Próximo";
   }, [step]);
 
   const secondaryActionLabel = useMemo(() => {
@@ -93,7 +93,7 @@ const SearchModal = () => {
       return undefined;
     }
 
-    return "Back";
+    return "Voltar";
   }, [step]);
 
 
