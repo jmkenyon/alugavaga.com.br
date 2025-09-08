@@ -1,7 +1,3 @@
-"use client";
-
-import React from "react";
-import Container from "../Container";
 import { GiHomeGarage } from "react-icons/gi";
 import { BiCar, BiSolidCarGarage } from "react-icons/bi";
 import { MdOutlineQuestionMark } from "react-icons/md";
@@ -31,21 +27,4 @@ export const categories = [
   }
 ];
 
-const Categories = () => {
-  return (
-    <Container>
-      <div
-        className="
-            pt-4
-            flex
-            flex-row
-            items-center
-            justify-between
-            overflow-x-auto
-         "
-      ></div>
-    </Container>
-  );
-};
 
-export default Categories;

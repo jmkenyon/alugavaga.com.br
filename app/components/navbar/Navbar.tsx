@@ -27,7 +27,7 @@ const Navbar: React.FC<NavbarProps> = ({
           </div>
         </Container>
       </div>
-      {/* <Categories />  2:45 */}
+    
     </div>
   );
 };

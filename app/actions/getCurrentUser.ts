@@ -1,35 +1,41 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
-
 import prisma from "@/app/libs/prismadb";
+import jwt from "jsonwebtoken";
 
-export async function getSession() {
-  return await getServerSession(authOptions);
-}
+const JWT_SECRET = process.env.NEXTAUTH_SECRET || "supersecretkey";
 
-export default async function getCurrentUser() {
+export default async function getCurrentUser(authHeader?: string) {
   try {
-    const session = await getSession();
+    let email: string | undefined;
 
-    if (!session?.user?.email) {
+    if (authHeader?.startsWith("Bearer ")) {
+      // JWT from React Native
+      const token = authHeader.split(" ")[1];
+      const payload = jwt.verify(token, JWT_SECRET) as { email: string };
+      email = payload?.email;
+    }
+
+    // fallback: NextAuth session (browser)
+    if (!email) {
+      // optionally add getServerSession logic here if needed for SSR
       return null;
     }
+
+    if (!email) return null;
+
     const currentUser = await prisma.user.findUnique({
-      where: {
-        email: session.user.email as string,
-      },
+      where: { email },
     });
 
-    if (!currentUser) {
-      return null;
-    }
+    if (!currentUser) return null;
+
     return {
       ...currentUser,
       createdAt: currentUser.createdAt.toISOString(),
       updatedAt: currentUser.updatedAt.toISOString(),
       emailVerified: currentUser.emailVerified?.toISOString() || null,
     };
-  } catch {
+  } catch (err) {
+    console.error("Error in getCurrentUser:", err);
     return null;
   }
 }
