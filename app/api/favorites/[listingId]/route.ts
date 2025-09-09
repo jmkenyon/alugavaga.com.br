@@ -60,3 +60,21 @@ export async function DELETE(
 
   return NextResponse.json(user);
 }
+
+export async function GET() {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+  }
+
+  const favorites = await prisma.listing.findMany({
+    where: {
+      id: {
+        in: currentUser.favoriteIds || [],
+      },
+    },
+  });
+
+  return NextResponse.json(favorites);
+}

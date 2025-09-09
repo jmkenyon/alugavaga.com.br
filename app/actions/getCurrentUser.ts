@@ -1,3 +1,5 @@
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import prisma from "@/app/libs/prismadb";
 import jwt from "jsonwebtoken";
 
@@ -7,25 +9,27 @@ export default async function getCurrentUser(authHeader?: string) {
   try {
     let email: string | undefined;
 
+    // --- Mobile JWT
     if (authHeader?.startsWith("Bearer ")) {
-      // JWT from React Native
       const token = authHeader.split(" ")[1];
-      const payload = jwt.verify(token, JWT_SECRET) as { email: string };
-      email = payload?.email;
+      try {
+        const payload = jwt.verify(token, JWT_SECRET) as { email?: string };
+        email = payload.email;
+      } catch (err) {
+        console.error("JWT verification failed:", err);
+        return null;
+      }
     }
 
-    // fallback: NextAuth session (browser)
+    // --- Web NextAuth fallback
     if (!email) {
-      // optionally add getServerSession logic here if needed for SSR
-      return null;
+      const session = await getServerSession(authOptions);
+      email = session?.user?.email ?? undefined;
     }
 
     if (!email) return null;
 
-    const currentUser = await prisma.user.findUnique({
-      where: { email },
-    });
-
+    const currentUser = await prisma.user.findUnique({ where: { email } });
     if (!currentUser) return null;
 
     return {
