@@ -11,7 +11,8 @@ export async function DELETE(
   request: Request,
   { params }: { params: Promise<IParams> }
 ) {
-  const currentUser = await getCurrentUser();
+  const authHeader = request.headers.get("Authorization") ?? undefined;
+  const currentUser = await getCurrentUser(authHeader);
 
   if (!currentUser) {
     return NextResponse.error();

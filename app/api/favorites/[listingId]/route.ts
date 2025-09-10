@@ -6,75 +6,57 @@ interface IParams {
   listingId?: string;
 }
 
-export async function POST(
-  request: Request,
-  context: { params: Promise<IParams> }
-) {
-  const currentUser = await getCurrentUser();
+export async function POST(request: Request, { params }: { params: IParams }) {
+  const authHeader = request.headers.get("Authorization") ?? undefined;
+  const currentUser = await getCurrentUser(authHeader);
+  console.log("POST /favorites, currentUser:", currentUser);
+
   if (!currentUser) {
-    return NextResponse.error();
+    return NextResponse.json({ error: "Usuário não logado" }, { status: 401 });
   }
 
-  const { listingId } = await context.params;
+  const { listingId } = params;
+  console.log("POST /favorites, listingId:", listingId);
 
   if (!listingId || typeof listingId !== "string") {
     return NextResponse.json({ error: "ID inválido" }, { status: 400 });
   }
 
   const favoriteIds = [...(currentUser.favoriteIds || [])];
-
-  if (!favoriteIds.includes(listingId)) {
-    favoriteIds.push(listingId);
-  }
+  if (!favoriteIds.includes(listingId)) favoriteIds.push(listingId);
 
   const user = await prisma.user.update({
     where: { id: currentUser.id },
     data: { favoriteIds },
   });
 
+  console.log("POST /favorites, updated user:", user);
   return NextResponse.json(user);
 }
 
-export async function DELETE(
-  request: Request,
-  context: { params: Promise<IParams> }
-) {
-  const currentUser = await getCurrentUser();
+export async function DELETE(request: Request, { params }: { params: IParams }) {
+  const authHeader = request.headers.get("Authorization") ?? undefined;
+  const currentUser = await getCurrentUser(authHeader);
+  console.log("DELETE /favorites called, currentUser:", currentUser);
+
   if (!currentUser) {
-    return NextResponse.error();
+    return NextResponse.json({ error: "Usuário não logado" }, { status: 401 });
   }
 
-  const { listingId } = await context.params;
+  const { listingId } = params;
+  console.log("DELETE /favorites, listingId:", listingId);
 
   if (!listingId || typeof listingId !== "string") {
     return NextResponse.json({ error: "ID inválido" }, { status: 400 });
   }
 
-  let favoriteIds = [...(currentUser.favoriteIds || [])];
-  favoriteIds = favoriteIds.filter((id) => id !== listingId);
+  const favoriteIds = (currentUser.favoriteIds || []).filter((id) => id !== listingId);
 
   const user = await prisma.user.update({
     where: { id: currentUser.id },
     data: { favoriteIds },
   });
 
+  console.log("DELETE /favorites, updated user:", user);
   return NextResponse.json(user);
-}
-
-export async function GET() {
-  const currentUser = await getCurrentUser();
-
-  if (!currentUser) {
-    return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
-  }
-
-  const favorites = await prisma.listing.findMany({
-    where: {
-      id: {
-        in: currentUser.favoriteIds || [],
-      },
-    },
-  });
-
-  return NextResponse.json(favorites);
 }
