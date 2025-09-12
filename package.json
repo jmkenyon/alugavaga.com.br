@@ -36,6 +36,7 @@
     "react-leaflet": "^5.0.0",
     "react-select": "^5.10.2",
     "react-spinners": "^0.17.0",
+    "serverless-jwt": "^1.0.0",
     "world-countries": "^5.1.0",
     "zustand": "^5.0.7"
   },
