@@ -29,18 +29,16 @@ export default async function handler(
     console.log("🔑 Token length:", token?.length);
 
     // 2️⃣ Decode token without verify for debugging
-    try {
-      const [, payloadBase64] = token.split(".");
+    const [, payloadBase64] = token.split(".");
+    if (payloadBase64) {
       const decodedPayload = JSON.parse(
         Buffer.from(payloadBase64, "base64url").toString()
       );
       console.log("🔍 Decoded token payload (unverified):", decodedPayload);
-    } catch (err) {
-      console.error("❌ Failed to decode token payload:", err);
     }
 
     // 3️⃣ Verify token
-    let payload;x-access-token
+    let payload;
     try {
       payload = jwt.verify(token, JWT_SECRET) as { email?: string };
       console.log("✅ JWT successfully verified. Payload:", payload);
