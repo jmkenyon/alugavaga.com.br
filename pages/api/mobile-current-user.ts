@@ -15,30 +15,20 @@ export default async function handler(
   console.log("Request headers:", req.headers);
 
   try {
-    // 1️⃣ Extract Authorization header
-    const authHeader = req.headers.authorization;
-    console.log("⬅️ Incoming Authorization header:", authHeader);
+    // 1️⃣ Extract token from custom header
+    const token = req.headers["x-access-token"] as string | undefined;
+    console.log("⬅️ Incoming x-access-token header:", token);
 
-    if (!authHeader) {
-      console.warn("⚠️ No Authorization header found!");
+    if (!token) {
+      console.warn("⚠️ No x-access-token header found!");
       return res
         .status(401)
-        .json({ message: "Unauthorized: No Authorization header" });
+        .json({ message: "Unauthorized: No token provided" });
     }
 
-    if (!authHeader.startsWith("Bearer ")) {
-      console.warn("⚠️ Authorization header does not start with 'Bearer '");
-      return res
-        .status(401)
-        .json({ message: "Unauthorized: Invalid Authorization format" });
-    }
-
-    // 2️⃣ Extract token
-    const token = authHeader.split(" ")[1];
-    console.log("🔑 Extracted Token:", token);
     console.log("🔑 Token length:", token?.length);
 
-    // 3️⃣ Decode token without verify for debugging
+    // 2️⃣ Decode token without verify for debugging
     try {
       const [, payloadBase64] = token.split(".");
       const decodedPayload = JSON.parse(
@@ -49,7 +39,7 @@ export default async function handler(
       console.error("❌ Failed to decode token payload:", err);
     }
 
-    // 4️⃣ Verify token
+    // 3️⃣ Verify token
     let payload;
     try {
       payload = jwt.verify(token, JWT_SECRET) as { email?: string };
@@ -64,7 +54,7 @@ export default async function handler(
       return res.status(401).json({ message: "Unauthorized: Missing email" });
     }
 
-    // 5️⃣ Fetch user from DB
+    // 4️⃣ Fetch user from DB
     console.log("🔎 Fetching user from database with email:", payload.email);
     const user = await prisma.user.findUnique({
       where: { email: payload.email },
