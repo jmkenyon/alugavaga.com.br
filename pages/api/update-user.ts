@@ -10,20 +10,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ message: "Method not allowed" });
   }
 
-  const authHeader = req.headers.authorization;
-  if (!authHeader?.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Unauthorized" });
+  // 🔑 Get token from x-access-token header
+  const token = req.headers["x-access-token"] as string | undefined;
+  console.log("⬅️ Incoming x-access-token header:", token);
+
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized: No token provided" });
   }
 
-  const token = authHeader.split(" ")[1];
-
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as { email: string };
+    // ✅ Verify token
+    const payload = jwt.verify(token, JWT_SECRET) as { email?: string };
+    console.log("✅ Token payload:", payload);
+
     if (!payload?.email) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ message: "Unauthorized: Missing email" });
     }
 
-    const { name, image } = req.body; // accept both name and image
+    const { name, image } = req.body;
 
     if (!name && !image) {
       return res.status(400).json({ message: "Nothing to update" });
@@ -31,16 +35,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const updateData: { name?: string; image?: string } = {};
     if (name) updateData.name = name;
-    if (image) updateData.image = image; // this is the Cloudinary URL
+    if (image) updateData.image = image;
 
     const updatedUser = await prisma.user.update({
       where: { email: payload.email },
       data: updateData,
     });
 
+    console.log("✅ User successfully updated:", updatedUser);
     return res.status(200).json(updatedUser);
   } catch (err) {
-    console.error(err);
+    console.error("❌ JWT verification or update failed:", err);
     return res.status(401).json({ message: "Invalid token" });
   }
 }

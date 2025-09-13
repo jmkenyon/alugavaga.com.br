@@ -5,18 +5,18 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.NEXTAUTH_SECRET || "supersecretkey";
 
-export default async function getCurrentUser(authHeader?: string) {
+export default async function getCurrentUser(xAccessToken?: string) {
   try {
     let email: string | undefined;
 
-    // --- Mobile JWT
-    if (authHeader?.startsWith("Bearer ")) {
-      const token = authHeader.split(" ")[1];
+    // --- Mobile JWT (using passed xAccessToken)
+    if (xAccessToken) {
       try {
-        const payload = jwt.verify(token, JWT_SECRET) as { email?: string };
+        const payload = jwt.verify(xAccessToken, JWT_SECRET) as { email?: string };
         email = payload.email;
+        console.log("✅ Mobile token verified, email:", email);
       } catch (err) {
-        console.error("JWT verification failed:", err);
+        console.error("❌ JWT verification failed:", err);
         return null;
       }
     }

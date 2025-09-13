@@ -40,7 +40,7 @@ export default async function handler(
     }
 
     // 3️⃣ Verify token
-    let payload;
+    let payload;x-access-token
     try {
       payload = jwt.verify(token, JWT_SECRET) as { email?: string };
       console.log("✅ JWT successfully verified. Payload:", payload);
