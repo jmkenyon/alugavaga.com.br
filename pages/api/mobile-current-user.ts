@@ -70,6 +70,7 @@ export default async function handler(
       createdAt: user.createdAt.toISOString(),
       updatedAt: user.updatedAt.toISOString(),
       emailVerified: user.emailVerified?.toISOString() || null,
+      favoriteIds: user.favoriteIds || [],
     };
 
     console.log("✅ Sending user response:", userResponse);
