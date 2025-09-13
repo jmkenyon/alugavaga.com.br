@@ -4,9 +4,18 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 
 export async function GET(request: Request) {
   try {
-    const currentUser = await getCurrentUser(
-      request.headers.get("authorization") || undefined
-    );
+    // 1️⃣ Mobile token
+    const xAccessToken = request.headers.get("x-access-token") || undefined;
+
+    // 2️⃣ Web Authorization header fallback
+    const authHeader = request.headers.get("Authorization") || undefined;
+    let token: string | undefined = xAccessToken;
+
+    if (!token && authHeader?.startsWith("Bearer ")) {
+      token = authHeader.split(" ")[1];
+    }
+
+    const currentUser = await getCurrentUser(token);
 
     console.log("Fetched user:", currentUser);
 
