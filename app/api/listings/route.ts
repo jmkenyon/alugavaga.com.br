@@ -7,7 +7,7 @@ import getListings, { IListingsParams } from "@/app/actions/getListings";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
-  const listingId = searchParams.get("listingId"); // <-- new
+  const listingId = searchParams.get("listingId");
 
   if (listingId) {
     // fetch single listing by ID with user
@@ -28,60 +28,37 @@ export async function GET(request: Request) {
     userId: searchParams.get("userId") || undefined,
     startDate: searchParams.get("startDate") || undefined,
     endDate: searchParams.get("endDate") || undefined,
-    lat: searchParams.get("lat")
-      ? parseFloat(searchParams.get("lat")!)
-      : undefined,
-    lng: searchParams.get("lng")
-      ? parseFloat(searchParams.get("lng")!)
-      : undefined,
+    lat: searchParams.get("lat") ? parseFloat(searchParams.get("lat")!) : undefined,
+    lng: searchParams.get("lng") ? parseFloat(searchParams.get("lng")!) : undefined,
   };
 
   const listings = await getListings(params);
   return NextResponse.json(listings);
 }
+
 // ---------------- CREATE LISTING ----------------
 export async function POST(request: Request) {
-  const authHeader = request.headers.get("Authorization") ?? undefined;
-  const currentUser = await getCurrentUser(authHeader);
-
-  if (!currentUser) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  let body;
   try {
-    body = await request.json();
-    console.log("Request body received:", body);
-  } catch (err) {
-    console.error("Error parsing JSON:", err);
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+    // Try mobile x-access-token first
+    const xAccessToken = request.headers.get("x-access-token") || undefined;
+    const authHeader = request.headers.get("Authorization") ?? undefined;
+    const currentUser = await getCurrentUser(xAccessToken || authHeader);
 
-  const { category, location, whatsapp, imageSrc, price, title, description } =
-    body;
+    if (!currentUser) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-  // Log individual fields for clarity
-  console.log("category:", category);
-  console.log("location:", location);
-  console.log("whatsapp:", whatsapp);
-  console.log("imageSrc:", imageSrc);
-  console.log("price:", price);
-  console.log("title:", title);
-  console.log("description:", description);
+    const body = await request.json();
 
-  const lat = location?.latlng?.[0];
-  const lng = location?.latlng?.[1];
-  console.log("Parsed lat/lng:", lat, lng);
+    const { category, location, whatsapp, imageSrc, price, title, description } = body;
 
-  if (typeof lat !== "number" || typeof lng !== "number") {
-    console.log("Invalid lat/lng. Returning error.");
-    return NextResponse.json(
-      { error: "Invalid location data" },
-      { status: 400 }
-    );
-  }
+    const lat = location?.latlng?.[0];
+    const lng = location?.latlng?.[1];
 
-  try {
+    if (typeof lat !== "number" || typeof lng !== "number") {
+      return NextResponse.json({ error: "Invalid location data" }, { status: 400 });
+    }
+
     const listing = await prisma.listing.create({
       data: {
         title,
@@ -94,19 +71,14 @@ export async function POST(request: Request) {
         lat,
         lng,
         user: {
-          connect: {
-            id: currentUser.id,
-          },
+          connect: { id: currentUser.id },
         },
       },
     });
-    console.log("Listing created:", listing);
+
     return NextResponse.json(listing);
   } catch (err) {
-    console.error("Error creating listing in DB:", err);
-    return NextResponse.json(
-      { error: "Failed to create listing" },
-      { status: 500 }
-    );
+    console.error("Error creating listing:", err);
+    return NextResponse.json({ error: "Failed to create listing" }, { status: 500 });
   }
 }
