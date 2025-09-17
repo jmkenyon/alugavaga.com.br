@@ -19,6 +19,8 @@
     "dotenv": "^17.2.2",
     "formidable": "^3.5.4",
     "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.2.0",
+    "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
     "next": "^15.4.5",
     "next-auth": "^4.24.11",
