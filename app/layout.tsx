@@ -10,6 +10,7 @@ import getCurrentUser from "./actions/getCurrentUser";
 import SearchModal from "./components/modals/SearchModal";
 import { Suspense } from "react";
 import WhatsappButton from "./components/WhatsappButton";
+import ContentWrapper from "./components/ContentWrapper";
 
 
 const inter = Inter({
@@ -70,7 +71,7 @@ export default async function RootLayout({
         <RentModal />
         <RegisterModal />
         <LoginModal />
-        <div className="pb-20 pt-28">{children}</div>
+        <ContentWrapper>{children}</ContentWrapper>
         <WhatsappButton /> 
       </body>
     </html>
