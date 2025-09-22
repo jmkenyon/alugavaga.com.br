@@ -7,7 +7,7 @@ import MenuItem from "./MenuItem";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import useRentModal from "@/app/hooks/useRentModal";
-import { signOut } from "next-auth/react";
+import { SessionProvider, signOut } from "next-auth/react";
 import { SafeUser } from "@/app/types";
 import { useRouter } from "next/navigation";
 
@@ -76,7 +76,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
         <div className="absolute rounded-xl shadow-md w-[40vw] md:w-60 bg-white overflow-hidden right-0 top-12 text-sm">
           <div className="flex flex-col cursor-pointer">
             {currentUser ? (
-              <>
+              <SessionProvider>
                 <MenuItem
                   onClick={rentModal.onOpen}
                   label="Anunciar minha vaga"
@@ -89,7 +89,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                 <MenuItem onClick={() => router.push('/vagas')} label="Minhas vagas" />
                 <hr />
                 <MenuItem onClick={() => signOut()} label="Sair" />
-              </>
+              </SessionProvider>
             ) : (
               <>
                 <MenuItem onClick={loginModal.onOpen} label="Entrar" />

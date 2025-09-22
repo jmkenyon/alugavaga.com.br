@@ -5,7 +5,7 @@ function EmptyStateMessenger() {
     <div className='px-4 py-10 sm:px-6 lg:px-8 h-screen flex justify-center items-center bg-gray-100'>
       <div className='text-center items-center flex flex-col'>
         <h3
-          className='mt-2
+          className='
           text-2xl
           font-semibold
           text-gray-900'

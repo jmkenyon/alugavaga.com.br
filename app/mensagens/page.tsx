@@ -1,13 +1,21 @@
-import React from 'react'
-import EmptyStateMessenger from './components/EmptyStateMessenger'
+"use client";
 
-function page() {
+import clsx from "clsx";
+import useConversation from "../users/hooks/useConversation";
+import EmptyStateMessenger from "../users/components/EmptyStateMessenger";
+
+const Page = () => {
+  const { isOpen } = useConversation();
   return (
-    <div className='hidden lg:block lg:pl-80 h-full mt-16
-'>
-        <EmptyStateMessenger/>
+    <div
+      className={clsx(
+        "lg:pl-80 h-full lg:block mt-22",
+        isOpen ? "block" : "hidden"
+      )}
+    >
+      <EmptyStateMessenger />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default Page;

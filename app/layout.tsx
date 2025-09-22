@@ -71,8 +71,10 @@ export default async function RootLayout({
         <RentModal />
         <RegisterModal />
         <LoginModal />
-        <ContentWrapper>{children}</ContentWrapper>
-        <WhatsappButton /> 
+        <ContentWrapper>
+          {children}
+          </ContentWrapper>
+        {/* <WhatsappButton />  */}
       </body>
     </html>
   );

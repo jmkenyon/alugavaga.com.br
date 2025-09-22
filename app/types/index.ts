@@ -1,9 +1,12 @@
-import { User, Listing, Reservation } from "@prisma/client";
-
-export type SafeListing = Omit<
+import {
+  User,
   Listing,
-  "createdAt"
-> & {
+  Reservation,
+  Conversation,
+  Message,
+} from "@prisma/client";
+
+export type SafeListing = Omit<Listing, "createdAt"> & {
   createdAt: string;
 };
 
@@ -14,8 +17,8 @@ export type SafeReservation = Omit<
   createdAt: string;
   startDate: string;
   endDate: string;
-  listing: SafeListing
-}
+  listing: SafeListing;
+};
 
 export type SafeUser = Omit<
   User,
@@ -24,4 +27,14 @@ export type SafeUser = Omit<
   createdAt: string;
   updatedAt: string;
   emailVerified: string | null;
+};
+
+export type FullMessageType = Message & {
+  sender: User;
+  seen: User[];
+};
+
+export type FullConversationType = Conversation & {
+  users: User[];
+  messages: FullMessageType[];
 };

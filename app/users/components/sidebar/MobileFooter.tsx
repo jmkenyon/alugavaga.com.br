@@ -30,8 +30,9 @@ function MobileFooter() {
         <MobileItem
             key={route.href}
             href={route.href}
-            active={route.icon}
+            active={route.active}
             onClick={route.onClick}
+            icon={route.icon}
         />
     ))}
     
