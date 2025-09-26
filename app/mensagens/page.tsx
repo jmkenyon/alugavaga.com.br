@@ -1,8 +1,8 @@
 "use client";
 
 import clsx from "clsx";
-import useConversation from "../users/hooks/useConversation";
-import EmptyStateMessenger from "../users/components/EmptyStateMessenger";
+import useConversation from "./hooks/useConversation";
+import EmptyStateMessenger from "./components/EmptyStateMessenger";
 
 const Page = () => {
   const { isOpen } = useConversation();

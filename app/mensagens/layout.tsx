@@ -1,5 +1,5 @@
 import getConversations from "../actions/getConversations";
-import ConversationList from "./components/ConversationList";
+import ConversationListWrapper from "./components/ConversationListWrapper";
 
 export default async function ConversationsLayout({
   children,
@@ -8,9 +8,9 @@ export default async function ConversationsLayout({
 }) {
   const conversations = await getConversations();
   return (
-      <div className="h-full">
-        <ConversationList initialItems={conversations} />
-        {children}
-      </div>
+    <>
+      <ConversationListWrapper initialItems={conversations} />
+      {children}
+    </>
   );
 }

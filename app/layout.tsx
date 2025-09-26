@@ -9,8 +9,9 @@ import ToasterProvider from "./providers/ToasterProvider";
 import getCurrentUser from "./actions/getCurrentUser";
 import SearchModal from "./components/modals/SearchModal";
 import { Suspense } from "react";
-import WhatsappButton from "./components/WhatsappButton";
 import ContentWrapper from "./components/ContentWrapper";
+import ConditionalWhatsapp from "./components/ConditionalWhatsapp";
+import ActiveStatus from "./mensagens/components/ActiveStatus";
 
 
 const inter = Inter({
@@ -64,6 +65,7 @@ export default async function RootLayout({
     <html lang="pt-BR">
       <body className={inter.className}>
         <ToasterProvider />
+        <ActiveStatus />
         <Suspense fallback={<div>Carregando...</div>}>
           <SearchModal />
           <Navbar currentUser={currentUser} />
@@ -71,10 +73,11 @@ export default async function RootLayout({
         <RentModal />
         <RegisterModal />
         <LoginModal />
+  
         <ContentWrapper>
           {children}
           </ContentWrapper>
-        {/* <WhatsappButton />  */}
+          <ConditionalWhatsapp />
       </body>
     </html>
   );

@@ -20,7 +20,7 @@ const ListingPage = async ({ params }: { params: Promise<IParams> }) => {
     return <EmptyState />;
   }
 
-  return <ListingClient listing={listing} currentUser={currentUser} reservations={reservations} />;
+  return <ListingClient data={listing.user} listing={listing} currentUser={currentUser} reservations={reservations} />;
 };
 
 export default ListingPage;

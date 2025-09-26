@@ -5,24 +5,31 @@ import { IconType } from "react-icons";
 
 interface buttonProps {
   label: string;
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  type?: "button" | "submit" | "reset"; // add this
   disabled?: boolean;
   outline?: boolean;
   small?: boolean;
+  danger?: boolean;
+  secondary?: boolean;
   icon?: IconType;
 }
 
 const Button: React.FC<buttonProps> = ({
   label,
   onClick,
+  type="button",
   disabled,
   outline,
   small,
+  danger,
+  secondary,
   icon: Icon,
 }) => {
   return (
     <button
       onClick={onClick}
+      type={type} 
       disabled={disabled}
       className={`
             relative
@@ -39,6 +46,8 @@ const Button: React.FC<buttonProps> = ({
             ${small ? "text-sm" : "text-md"}
             ${small ? "font-light" : "font-semibold"}
             ${small ? "border-[1px]" : "border-2"}
+            ${danger && "bg-red-700 border-red-700 w-32 " }
+            ${secondary &&  "border-none"}
             `}
     >
       {Icon && (

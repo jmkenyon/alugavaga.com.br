@@ -1,10 +1,10 @@
 "use client";
-import useConversation from "@/app/users/hooks/useConversation";
+import useConversation from "@/app/mensagens/hooks/useConversation";
 import axios from "axios";
-import { Field, FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import {FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { HiPaperAirplane, HiPhoto } from "react-icons/hi2";
 import MessageInput from "./MessageInput";
-import { CldUploadButton } from "next-cloudinary";
+import { CldUploadButton, type CloudinaryUploadWidgetResults } from "next-cloudinary";
 
 const Form = () => {
   const { conversationId } = useConversation();
@@ -26,12 +26,18 @@ const Form = () => {
     });
   };
 
-  const handleUpload = (result: any) => {
-    axios.post('../api/messages', {
-        image: result?.info?.secure_url,
-        conversationId
-    })
-  }
+  const handleUpload = (result: CloudinaryUploadWidgetResults) => {
+    if (result.event !== "success") return;
+  
+    if (typeof result.info === "object" && "secure_url" in result.info) {
+      const info = result.info as { secure_url: string };
+  
+      axios.post("../api/messages", {
+        image: info.secure_url,
+        conversationId,
+      });
+    }
+  };
 
   return (
     <div
@@ -48,7 +54,7 @@ const Form = () => {
     "
     >
       <CldUploadButton
-        options={{maxFiles: 1}}
+        options={{ maxFiles: 1 }}
         uploadPreset="alugavaga_upload_preset"
         onSuccess={handleUpload}
       >
@@ -63,7 +69,7 @@ const Form = () => {
           id="message"
           register={register}
           errors={errors}
-          rquired
+          required
           placeholder="Digite uma mensagem"
         />
         <button
