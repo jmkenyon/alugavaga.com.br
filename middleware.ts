@@ -5,6 +5,8 @@ export const config = {
         "/reservas",
         "/favoritos",
         "/reservas-recebidas",
-        "/vagas"
+        "/vagas",
+        "/mensagens",
+        "/mensagens/:path*"
     ]
 }
