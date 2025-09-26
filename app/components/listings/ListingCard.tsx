@@ -1,16 +1,14 @@
 "use client";
 
-import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
+import { SafeListing, SafeUser } from "@/app/types";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
-import { format } from "date-fns";
 import Image from "next/image";
 import HeartButton from "../HeartButton";
 import Button from "../Button";
 
 interface ListingCardProps {
   data: SafeListing;
-  reservation?: SafeReservation;
   onAction?: (id: string) => void;
   disabled?: boolean;
   actionLabel?: string;
@@ -20,7 +18,6 @@ interface ListingCardProps {
 
 const ListingCard: React.FC<ListingCardProps> = ({
   data,
-  reservation,
   onAction,
   disabled,
   actionLabel,
@@ -66,23 +63,11 @@ const ListingCard: React.FC<ListingCardProps> = ({
   );
 
   const price = useMemo(() => {
-    if (reservation) {
-      return reservation.totalPrice;
-    }
+
 
     return data.price;
-  }, [reservation, data.price]);
+  }, [ data.price]);
 
-  const reservationDate = useMemo(() => {
-    if (!reservation) {
-      return null;
-    }
-
-    const start = new Date(reservation.startDate);
-    const end = new Date(reservation.endDate);
-
-    return `${format(start, "PP")} - ${format(end, "PP")}`;
-  }, [reservation]);
 
   return (
     <div
@@ -117,13 +102,13 @@ const ListingCard: React.FC<ListingCardProps> = ({
             <HeartButton listingId={data.id} currentUser={currentUser} />
           </div>
         </div>
-        <div className="font-semibold">{reservationDate || data.title}</div>
+        <div className="font-semibold">{data.title}</div>
         <div className="font-light text-neutral-500">
           {street && street}, {cityState && cityState}
         </div>
         <div className="flex flex-row items-center gap-1">
           <div className="font-semibold">R${price}</div>
-          {!reservation && <div className="font-light">por mês</div>}
+          <div className="font-light">por mês</div>
         </div>
         {onAction && actionLabel && (
           <Button

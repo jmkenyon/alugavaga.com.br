@@ -1,7 +1,7 @@
 "use client";
 
 import Container from "@/app/components/Container";
-import { SafeListing, SafeReservation, SafeUser } from "@/app/types";
+import { SafeListing, SafeUser } from "@/app/types";
 import ListingHead from "@/app/components/listings/ListingHead";
 import ListingInfo from "@/app/components/listings/ListingInfo";
 import useLoginModal from "@/app/hooks/useLoginModal";
@@ -12,7 +12,6 @@ import ListingReservation from "@/app/components/listings/ListingReservation";
 
 
 interface ListingClientProps {
-  reservations?: SafeReservation[];
   data: {
     name: string | null;
     id: string;
