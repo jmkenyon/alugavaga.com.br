@@ -41,11 +41,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const onCreateConversatoin = useCallback(() => {
-    if (!currentUser) {
-      return loginModal.onOpen();
-    }
-  
+  const createConversation = useCallback(() => {
     if (!data?.id) {
       console.error("No user data available");
       return;
@@ -53,14 +49,23 @@ const ListingClient: React.FC<ListingClientProps> = ({
   
     setIsLoading(true);
   
-    axios.post("/api/conversations", {
-      userId: data.id,
-    })
-    .then((res) => {
-      router.push(`/mensagens/${res.data.id}`);
-    })
-    .finally(() => setIsLoading(false));
-  }, [data, router, loginModal, currentUser]);
+    axios.post("/api/conversations", { userId: data.id })
+      .then((res) => {
+        router.push(`/mensagens/${res.data.id}`);
+      })
+      .finally(() => setIsLoading(false));
+  }, [data, router]);
+  
+  const onCreateConversation = useCallback(() => {
+    if (!currentUser) {
+      // Open login modal and retry after success
+      return loginModal.onOpen(() => {
+        createConversation(); // ✅ stable reference, no recursion
+      });
+    }
+  
+    createConversation();
+  }, [currentUser, loginModal, createConversation]);
 
   return (
     <Container>
@@ -99,7 +104,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
             >
               <ListingReservation
                 price={listing.price}
-                onSubmit={onCreateConversatoin}
+                onSubmit={onCreateConversation}
                 disabled={isLoading}
                
               />
