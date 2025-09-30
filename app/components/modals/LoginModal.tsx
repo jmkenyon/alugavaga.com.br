@@ -59,8 +59,9 @@ const LoginModal = () => {
   };
 
   const toggle = useCallback(() => {
+    const pendingAction = loginModal.onSuccess; // Save the continuation
     loginModal.onClose();
-    registerModal.onOpen();
+    registerModal.onOpen(pendingAction); // Pass it along
   }, [loginModal, registerModal]);
 
   const bodyContent = (

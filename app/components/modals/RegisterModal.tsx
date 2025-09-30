@@ -34,21 +34,27 @@ const RegisterModal = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
-
+  
     axios
       .post("/api/register", data)
       .then(() => {
-        // After successful registration, call signIn to login automatically
         signIn("credentials", {
           email: data.email,
           password: data.password,
           redirect: false,
         }).then((callback) => {
           setIsLoading(false);
+  
           if (callback?.ok) {
             toast.success("Conta criada e logada com sucesso!");
+  
+            // Close modal
             registerModal.onClose();
-            window.location.reload();
+  
+            // Continue the pending action (e.g., start conversation)
+            if (registerModal.onSuccess) {
+              registerModal.onSuccess();
+            }
           } else {
             toast.error("Conta criada, mas falha ao logar automaticamente.");
           }
