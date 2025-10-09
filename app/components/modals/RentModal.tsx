@@ -256,7 +256,7 @@ const RentModal = () => {
       actionLabel={actionLabel}
       secondaryActionLabel={secondaryActionLabel}
       secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
-      title="Anuncie sua vaga" // List your space
+      title="Anuncie sua vaga"
       body={bodyContent}
     />
   );
