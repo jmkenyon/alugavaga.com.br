@@ -24,7 +24,7 @@ const IncentiveModal = () => {
       body={
         <div className="text-center">
           <p className="text-lg font-medium">
-            Anuncie sua vaga hoje e receba <strong>R$150 via PIX!</strong>
+            Anuncie sua vaga hoje e receba <strong>R$100 via PIX!</strong>
           </p>
           <p className="my-4">
             É só nos chamar no WhatsApp quando terminar 🚀
