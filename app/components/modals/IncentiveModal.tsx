@@ -9,7 +9,7 @@ const IncentiveModal = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsOpen(true);
-    }, 5000); // 5 seconds
+    }, 10000); // 5 seconds
 
     return () => clearTimeout(timer);
   }, []);
@@ -18,7 +18,7 @@ const IncentiveModal = () => {
     <Modal
       isOpen={isOpen}
       onClose={() => setIsOpen(false)}
-      title="Ganhe R$150!"
+      title="Ganhe R$100!"
       actionLabel="Fechar"
       onSubmit={() => setIsOpen(false)}
       body={
