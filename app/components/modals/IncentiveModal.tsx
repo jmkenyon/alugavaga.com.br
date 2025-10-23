@@ -18,13 +18,13 @@ const IncentiveModal = () => {
     <Modal
       isOpen={isOpen}
       onClose={() => setIsOpen(false)}
-      title="Ganhe R$75!"
+      title="Ganhe R$50!"
       actionLabel="Fechar"
       onSubmit={() => setIsOpen(false)}
       body={
         <div className="text-center">
           <p className="text-lg font-medium">
-            Anuncie sua vaga hoje e receba <strong>R$75 via PIX!</strong>
+            Anuncie sua vaga hoje e receba <strong>R$50 via PIX!</strong>
           </p>
           <p className="my-4">
             É só nos chamar no WhatsApp quando terminar 🚀

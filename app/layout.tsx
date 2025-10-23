@@ -74,7 +74,7 @@ export default async function RootLayout({
         <RentModal />
         <RegisterModal />
         <LoginModal />
-        <IncentiveModal />
+        {/* <IncentiveModal /> */}
         <ContentWrapper>
           {children}
           </ContentWrapper>
