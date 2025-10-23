@@ -9,7 +9,7 @@ const IncentiveModal = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsOpen(true);
-    }, 10000); // 5 seconds
+    }, 10000); // 10 seconds
 
     return () => clearTimeout(timer);
   }, []);
@@ -18,13 +18,13 @@ const IncentiveModal = () => {
     <Modal
       isOpen={isOpen}
       onClose={() => setIsOpen(false)}
-      title="Ganhe R$100!"
+      title="Ganhe R$75!"
       actionLabel="Fechar"
       onSubmit={() => setIsOpen(false)}
       body={
         <div className="text-center">
           <p className="text-lg font-medium">
-            Anuncie sua vaga hoje e receba <strong>R$100 via PIX!</strong>
+            Anuncie sua vaga hoje e receba <strong>R$75 via PIX!</strong>
           </p>
           <p className="my-4">
             É só nos chamar no WhatsApp quando terminar 🚀
