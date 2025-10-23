@@ -12,7 +12,6 @@ import { Suspense } from "react";
 import ContentWrapper from "./components/ContentWrapper";
 import ConditionalWhatsapp from "./components/ConditionalWhatsapp";
 import ActiveStatus from "./mensagens/components/ActiveStatus";
-import IncentiveModal from "./components/modals/IncentiveModal";
 
 
 const inter = Inter({
